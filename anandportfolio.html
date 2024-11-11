@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anand Mishra | Portfolio</title>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.159.0/three.module.min.js"
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --peach-light: #FFF0E5;
+            --peach-medium: #FFD6C4;
+            --peach-dark: #FFB4A2;
+            --accent-primary: #2A2B5F;
+            --accent-secondary: #7868E6;
+            --accent-tertiary: #B8B5FF;
+            --text-primary: #2D3436;
+            --text-secondary: #636E72;
+            --shadow-soft: 0 8px 30px rgba(0,0,0,0.12);
+            --gradient-primary: linear-gradient(135deg, #7868E6 0%, #B8B5FF 100%);
+            --gradient-secondary: linear-gradient(135deg, #2A2B5F 0%, #7868E6 100%);
+            --gradient-highlight: linear-gradient(45deg, #7868E6, #FF6B6B);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: var(--peach-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Styles */
+        header {
+            padding: 6rem 0 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.2s;
+            position: relative;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+        }
+
+        .key-title {
+            display: inline-block;
+            position: relative;
+            color: var(--accent-primary);
+            font-weight: 600;
+            padding: 0 5px;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        .key-title::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-tertiary);
+            z-index: -1;
+            left: 0;
+            top: 0;
+            border-radius: 4px;
+            opacity: 0.3;
+            transform: skewX(-10deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .key-title::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: var(--gradient-highlight);
+            transition: width 0.4s ease;
+        }
+
+        .key-title:hover::after {
+            width: 100%;
+        }
+
+        /* Tech Badges */
+        .tech-badges-container {
+            margin: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .tech-badge {
+            background: linear-gradient(145deg, #ffffff, var(--peach-light));
+            color: var(--accent-secondary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(120, 104, 230, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-badge::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(120, 104, 230, 0.2), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .tech-badge:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(120, 104, 230, 0.3);
+        }
+
+        .tech-badge:hover::after {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        /* Section Styles */
+        section {
+            margin: 6rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        /* Achievement Highlight */
+        .achievement-highlight {
+            display: inline-block;
+            position: relative;
+            color: var(--accent-primary);
+            font-weight: 600;
+            padding: 2px 8px;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(120, 104, 230, 0.2), rgba(184, 181, 255, 0.2));
+            border-radius: 4px;
+            z-index: -1;
+            transform: scaleX(0.9) scaleY(0.8);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .achievement-highlight:hover::before {
+            transform: scaleX(1.1) scaleY(1.1);
+            background: linear-gradient(45deg, rgba(120, 104, 230, 0.3), rgba(184, 181, 255, 0.3));
+        }
+
+        /* Skills Section */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: linear-gradient(145deg, #ffffff, var(--peach-light));
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(120, 104, 230, 0.1);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(120, 104, 230, 0.2);
+            border: 1px solid rgba(120, 104, 230, 0.2);
+        }
+
+        .skill-name {
+            margin-bottom: 1rem;
+            color: var(--accent-secondary);
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: var(--peach-medium);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 1.5s ease;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: linear-gradient(145deg, #ffffff, var(--peach-light));
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(120, 104, 230, 0.1);
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(120, 104, 230, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .project-card:hover::after {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(120, 104, 230, 0.2);
+            border: 1px solid rgba(120, 104, 230, 0.2);
+        }
+
+        /* Contact Section */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-item {
+            background: linear-gradient(145deg, #ffffff, var(--peach-light));
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            border: 1px solid rgba(120, 104, 230, 0.1);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(120, 104, 230, 0.2);
+            border: 1px solid rgba(120, 104, 230, 0.2);
+        }
+
+        .contact-item a {
+            color: var(--accent-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                background-position: 200% center;
+                opacity: 0.3;
+            }
+        }
+
+        /* Canvas Container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="content">
+        <header>
+            <h1 class="hero-text">Anand Mishra</h1>
+            <p class="subtitle">
+                <span class="key-title">Investor & Trader</span> | 
+                <span class="key-title">UNESCO Youth Hackathon Finalist</span>
+            </p>
+            <div class="tech-badges-container">
+                <span class="tech-badge" style="animation-delay: 4.5s;">Trading</span>
+                <span class="tech-badge" style="animation-delay: 4.7s;">Scalping</span>
+                <span class="tech-badge" style="animation-delay: 4.9s;">Technical Analysis</span>
+                <span class="tech-badge" style="animation-delay: 5.1s;">Programming</span>
+            </div>
+        </header>
+
+        <section id="about">
+            <h2 class="section-title">About Me</h2>
+            <p>As an experienced <span class="achievement-highlight">investor and trader</span> with a specialized focus on <span class="achievement-highlight">scalping</span>, I excel in identifying rapid market opportunities and executing trades with precision. My analytical and quick-decision-making skills set me apart in the fast-paced trading environment.</p>
+            <p>Beyond trading, I'm passionate about <span class="achievement-highlight">innovation and technology</span>, having secured a top 10 position in the <span class="achievement-highlight">UNESCO Youth Hackathon</span>, where I collaborated with peers to tackle global digital challenges. My contributions as a <span class="achievement-highlight">Level 4 Hacktoberfest badge holder</span> underscore my dedication to advancing open-source projects and coding communities.</p>
+        </section>
+
+        <section id="skills">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-container">
+                <div class="skill-card">
+                    <h3 class="skill-name">HTML</h3>
+                    <div class="skill-bar">
+
+       
+                        <div class="skill-progress" style="width: 80%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3 class="skill-name">CSS</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3 class="skill-name">Python</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <h3 class="skill-name">C++</h3>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">Achievements</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>UNESCO Youth Hackathon</h3>
+                    <p>Top 10 Finalist in the UNESCO Youth Hackathon, contributing to innovative solutions for global challenges.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Hacktoberfest Level 4</h3>
+                    <p>Achieved Level 4 Badge in Hacktoberfest, contributing significantly to open-source projects.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Trading Analysis</h3>
+                    <p>Specialized in scalping strategies and technical analysis for market trading.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Connect With Me</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <a href="Anandmishra3001@gmail.com">Anandmishra3001@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <h3>LinkedIn</h3>
+                    <a href="https://www.linkedin.com/in/anand-mishra-a3a306225/" target="_blank">linkedin.com/in/anand-mishra</a>
+                </div>
+                <div class="contact-item">
+                    <h3>GitHub</h3>
+                    <a href="https://github.com/anand-242003" target="_blank">github.com/anand-mishra</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    
+    
+</body>
+</html>
